@@ -1,11 +1,13 @@
 package org.example.handlers.input;
 
 import org.example.objects.grid.Node;
+import org.example.pathfinding.AStarPathfinding;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class KeyInputHandler extends KeyAdapter {
+    private AStarPathfinding aStarPathfinding = new AStarPathfinding();
 
     @Override
     public void keyReleased(KeyEvent e) {
@@ -45,6 +47,26 @@ public class KeyInputHandler extends KeyAdapter {
             Node.createClearNode = !Node.createClearNode;
             Node.createBlockedNode = false;
             System.out.println("Clear Node : " + Node.createClearNode);
+        }
+
+
+        //pathfinding test
+        if(e.getKeyCode() == KeyEvent.VK_SPACE){
+            var allFoundNodes = aStarPathfinding.search(Node.startNode, Node.endNode);
+
+            for (var nodesFound:allFoundNodes) {
+                if(
+                        nodesFound.getNodeType() == Node.NodeType.start
+                        ||
+                        nodesFound.getNodeType() == Node.NodeType.end
+                        ||
+                        nodesFound.getNodeType() == Node.NodeType.block
+                ){
+                    continue;
+                }
+                //nodesFound.setNodeType(Node.NodeType.path);
+                Node.nodes[nodesFound.getRow()][nodesFound.getCol()].setNodeType(Node.NodeType.path);
+            }
         }
     }
 }

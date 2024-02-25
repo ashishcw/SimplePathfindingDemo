@@ -84,6 +84,7 @@ public class Main extends Canvas implements Runnable {
         }
         this.addMouseListener(this.mouseInputHandler);
 
+        this.requestFocus();
         start();
     }
 
