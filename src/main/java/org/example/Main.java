@@ -2,6 +2,8 @@ package org.example;
 
 import org.example.constant.Constants;
 import org.example.display.Window;
+import org.example.handlers.BaseHandler;
+import org.example.objects.TempObject;
 
 import java.awt.*;
 
@@ -12,6 +14,9 @@ public class Main extends Canvas implements Runnable {
 
     //Thread
     private Thread thread;
+
+    //Handler
+    private BaseHandler handlerBase;
 
     private boolean isRunning = false;
     public Main(){
@@ -35,6 +40,13 @@ public class Main extends Canvas implements Runnable {
         if(this.thread == null){
             this.thread = new Thread(this, "Addition_Thread_1");
         }
+
+        //Handler instantiation
+        if(this.handlerBase == null){
+            this.handlerBase = new BaseHandler();
+        }
+
+        this.handlerBase.allGameObjectsList.add(new TempObject(100, 100));
 
         start();
     }
@@ -110,6 +122,10 @@ public class Main extends Canvas implements Runnable {
 
     private void tick(){
 
+        //handler tick method call
+        if(this.handlerBase != null){
+            this.handlerBase.tick();
+        }
     }
 
     private void render(){
@@ -124,6 +140,11 @@ public class Main extends Canvas implements Runnable {
         g.fillRect(0, 0, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
 
         //additional render calls go here
+
+        //handler render call
+        if(this.handlerBase != null){
+            this.handlerBase.render(g);
+        }
 
         bs.show();
         g.dispose();
