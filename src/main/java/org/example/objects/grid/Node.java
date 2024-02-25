@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 
 public class Node extends GameObject {
     public static Node[][]nodes = new Node[Constants.MAX_ROWS][Constants.MAX_COLS];
+    public static Node startNode, endNode;
+
+    public static boolean createStartNode = false, createEndNode = false, createBlockedNode = false, createClearNode = false;
 
     private enum NodeType{
         start,
@@ -19,6 +22,9 @@ public class Node extends GameObject {
         none
     }
     private NodeType nodeType = NodeType.none;
+
+
+
 
 
     public Node(int xPosParam, int yPosParam, int colParam, int rowParam, NodeType nodeTypeParam) {
@@ -82,13 +88,65 @@ public class Node extends GameObject {
 
                 if(i == 0 && j == 0){
                     nodes[i][j].setNodeType(NodeType.start);
+                    startNode = nodes[i][j];
                 }
 
                 if(i == Constants.MAX_ROWS-1 && j == Constants.MAX_COLS-1){
                     nodes[i][j].setNodeType(NodeType.end);
+                    endNode = nodes[i][j];
                 }
             }
         }
+    }
+
+    public static Node getClickedTile(Point clickedPosition){
+        Node clickedNode = null;
+//        if(!createStartNode && !createBlockedNode && !createEndNode && !createClearNode){
+//
+//        }
+        var tempList = Arrays.stream(nodes)
+                .flatMap(Arrays::stream)
+                .collect(Collectors.toList());
+
+        for (var tempNode : tempList) {
+            if(
+                    (clickedPosition.getX() >= tempNode.getxPos()  && clickedPosition.getX() <= tempNode.getxPos()+Constants.NODE_SIZE)
+                            && (clickedPosition.getY() >= tempNode.getyPos()  && clickedPosition.getY() <= tempNode.getyPos()+Constants.NODE_SIZE)
+            ){
+                clickedNode = tempNode;
+                break;
+            }
+        }
+
+        if(createClearNode){
+            clickedNode.setNodeType(NodeType.none);
+        }
+
+        if(createBlockedNode){
+            if(clickedNode.getNodeType() != NodeType.block){
+                clickedNode.setNodeType(NodeType.block);
+            }else {
+                clickedNode.setNodeType(NodeType.none);
+            }
+
+        }
+
+        if(createStartNode){
+            if(startNode != null){
+                startNode.setNodeType(NodeType.none);
+            }
+            clickedNode.setNodeType(NodeType.start);
+            startNode = clickedNode;
+        }
+
+        if(createEndNode){
+            if(endNode != null){
+                endNode.setNodeType(NodeType.none);
+            }
+            clickedNode.setNodeType(NodeType.end);
+            endNode = clickedNode;
+        }
+        return clickedNode;
     }
 
 

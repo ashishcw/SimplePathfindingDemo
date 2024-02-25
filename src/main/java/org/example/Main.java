@@ -3,6 +3,8 @@ package org.example;
 import org.example.constant.Constants;
 import org.example.display.Window;
 import org.example.handlers.BaseHandler;
+import org.example.handlers.input.KeyInputHandler;
+import org.example.handlers.input.MouseInputHandler;
 import org.example.objects.TempObject;
 import org.example.objects.grid.Node;
 
@@ -22,6 +24,10 @@ public class Main extends Canvas implements Runnable {
 
     //Node
     private Node node;
+
+    //Input
+    private KeyInputHandler keyInputHandler;
+    private MouseInputHandler mouseInputHandler;
 
 
 
@@ -64,6 +70,19 @@ public class Main extends Canvas implements Runnable {
                 this.handlerBase.addObjectToList(Node.nodes[i][j]);
             }
         }
+
+        //Input instantiation
+        //Keyboard input
+        if(this.keyInputHandler == null){
+            this.keyInputHandler = new KeyInputHandler();
+        }
+        this.addKeyListener(this.keyInputHandler);
+
+        //Mouse input
+        if(this.mouseInputHandler == null){
+            this.mouseInputHandler = new MouseInputHandler();
+        }
+        this.addMouseListener(this.mouseInputHandler);
 
         start();
     }
