@@ -13,18 +13,20 @@ public class KeyInputHandler extends KeyAdapter {
 
         //Set Start Node
         if(e.getKeyCode() == KeyEvent.VK_S){
-            Node.createStartNode = true;
+            Node.createStartNode = !Node.createStartNode;
             Node.createEndNode = false;
             Node.createClearNode = false;
             Node.createBlockedNode = false;
+            System.out.println("Create Start Node : " + Node.createStartNode);
         }
 
         //Set End Node
         if(e.getKeyCode() == KeyEvent.VK_E){
             Node.createStartNode = false;
-            Node.createEndNode = true;
+            Node.createEndNode = !Node.createEndNode;
             Node.createClearNode = false;
             Node.createBlockedNode = false;
+            System.out.println("Create End Node : " + Node.createEndNode);
         }
 
         //Set Blocked Node
@@ -32,15 +34,17 @@ public class KeyInputHandler extends KeyAdapter {
             Node.createStartNode = false;
             Node.createEndNode = false;
             Node.createClearNode = false;
-            Node.createBlockedNode = true;
+            Node.createBlockedNode = !Node.createBlockedNode;
+            System.out.println("Create Blocked Node : " + Node.createBlockedNode);
         }
 
         //Set Clear Node
         if(e.getKeyCode() == KeyEvent.VK_C){
             Node.createStartNode = false;
             Node.createEndNode = false;
-            Node.createClearNode = true;
+            Node.createClearNode = !Node.createClearNode;
             Node.createBlockedNode = false;
+            System.out.println("Clear Node : " + Node.createClearNode);
         }
     }
 }
