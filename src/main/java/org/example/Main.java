@@ -4,6 +4,7 @@ import org.example.constant.Constants;
 import org.example.display.Window;
 import org.example.handlers.BaseHandler;
 import org.example.objects.TempObject;
+import org.example.objects.grid.Node;
 
 import java.awt.*;
 
@@ -14,11 +15,17 @@ public class Main extends Canvas implements Runnable {
 
     //Thread
     private Thread thread;
+    private boolean isRunning = false;
 
     //Handler
     private BaseHandler handlerBase;
 
-    private boolean isRunning = false;
+    //Node
+    private Node node;
+
+
+
+
     public Main(){
         init();
     }
@@ -45,8 +52,18 @@ public class Main extends Canvas implements Runnable {
         if(this.handlerBase == null){
             this.handlerBase = new BaseHandler();
         }
+        //this.handlerBase.allGameObjectsList.add(new TempObject(100, 100));
 
-        this.handlerBase.allGameObjectsList.add(new TempObject(100, 100));
+        //Node instantiation
+        Node.createNodeGrid();
+        if(this.node == null){
+            this.node = Node.nodes[0][0];
+        }
+        for (int i = 0; i < Node.nodes.length; i++){
+            for(int j = 0; j < Node.nodes.length; j++){
+                this.handlerBase.addObjectToList(Node.nodes[i][j]);
+            }
+        }
 
         start();
     }

@@ -9,8 +9,8 @@ public class Constants {
     public static final long OPTIMAL_TIME = 1000000000 / FPS;
 
 
-    public static final int NODE_SIZE = 10;
-    public static final int NODE_OFFSET = 10;
+    public static final int NODE_SIZE = 32;
+    public static final int NODE_OFFSET = 32;
 
     public static final int MAX_ROWS = 15;
     public static final int MAX_COLS = 15;
