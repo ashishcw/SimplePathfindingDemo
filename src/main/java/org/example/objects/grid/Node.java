@@ -6,6 +6,7 @@ import org.example.model.GameObject;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class Node extends GameObject {
@@ -13,8 +14,9 @@ public class Node extends GameObject {
     public static Node startNode, endNode;
 
     public static boolean createStartNode = false, createEndNode = false, createBlockedNode = false, createClearNode = false;
+    public static boolean generateRandomMap = true;
 
-    private enum NodeType{
+    public enum NodeType{
         start,
         end,
         block,
@@ -22,6 +24,10 @@ public class Node extends GameObject {
         none
     }
     private NodeType nodeType = NodeType.none;
+
+    private int gCost, hCost, fCost;
+
+    private Node cameFromNode;
 
 
 
@@ -45,6 +51,38 @@ public class Node extends GameObject {
         this.nodeType = nodeType;
     }
 
+    public int getgCost() {
+        return gCost;
+    }
+
+    public void setgCost(int gCost) {
+        this.gCost = gCost;
+    }
+
+    public int gethCost() {
+        return hCost;
+    }
+
+    public void sethCost(int hCost) {
+        this.hCost = hCost;
+    }
+
+    public int getfCost() {
+        return fCost;
+    }
+
+    public void setfCost(int fCost) {
+        this.fCost = fCost;
+    }
+
+    public Node getCameFromNode() {
+        return cameFromNode;
+    }
+
+    public void setCameFromNode(Node cameFromNode) {
+        this.cameFromNode = cameFromNode;
+    }
+
     @Override
     public void tick() {
 
@@ -61,6 +99,8 @@ public class Node extends GameObject {
                 this.getNodeType() == NodeType.end
                 ||
                 this.getNodeType() == NodeType.block
+                ||
+                this.getNodeType() == NodeType.path
         ){
             g.fillRect(this.getxPos(), this.getyPos(), this.getSizeWidth(), this.getSizeHeight());
         }else {
@@ -82,9 +122,16 @@ public class Node extends GameObject {
     }
 
     public static void createNodeGrid(){
+        Random rnd = new Random();
         for(int i = 0; i < Constants.MAX_ROWS; i++){
             for (int j = 0; j < Constants.MAX_COLS; j++){
                 nodes[i][j] = new Node(j*Constants.NODE_OFFSET, i*Constants.NODE_OFFSET, j, i, NodeType.none);
+                if(generateRandomMap){
+                    if(rnd.nextInt(0, 10) > 8){
+                        nodes[i][j] = new Node(j*Constants.NODE_OFFSET, i*Constants.NODE_OFFSET, j, i, NodeType.block);
+                    }
+                }
+
 
                 if(i == 0 && j == 0){
                     nodes[i][j].setNodeType(NodeType.start);
