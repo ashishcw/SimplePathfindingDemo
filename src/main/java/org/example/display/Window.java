@@ -27,6 +27,7 @@ public class Window {
 
         this.frame.setTitle("Pathfinding demo");
 
+        this.frame.setResizable(false);
         this.frame.setVisible(true);
         this.frame.setLocationRelativeTo(null);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
