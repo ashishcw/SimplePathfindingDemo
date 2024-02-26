@@ -5,6 +5,7 @@ import org.example.pathfinding.AStarPathfinding;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 public class KeyInputHandler extends KeyAdapter {
     private AStarPathfinding aStarPathfinding = new AStarPathfinding();
@@ -42,31 +43,50 @@ public class KeyInputHandler extends KeyAdapter {
 
         //Set Clear Node
         if(e.getKeyCode() == KeyEvent.VK_C){
-            Node.createStartNode = false;
-            Node.createEndNode = false;
-            Node.createClearNode = !Node.createClearNode;
-            Node.createBlockedNode = false;
-            System.out.println("Clear Node : " + Node.createClearNode);
+            for(int i = 0; i < Node.nodes.length; i++){
+                for(int j = 0; j < Node.nodes[i].length; j++){
+                    Node.nodes[i][j].setNodeType(Node.NodeType.none);
+                }
+            }
+        }
+
+        //random map generate
+        if(e.getKeyCode() == KeyEvent.VK_R){
+            Random rnd = new Random();
+            for(int i = 0; i < Node.nodes.length; i++){
+                for(int j = 0; j < Node.nodes[i].length; j++){
+                    if(rnd.nextInt(0, 10) > 8){
+                        Node.nodes[i][j].setNodeType(Node.NodeType.block);
+                    }
+                }
+            }
         }
 
 
         //pathfinding test
         if(e.getKeyCode() == KeyEvent.VK_SPACE){
             var allFoundNodes = aStarPathfinding.search(Node.startNode, Node.endNode);
+            //var allFoundNodes = aStarPathfinding.executeThreadExternally(Node.startNode, Node.endNode);
 
-            for (var nodesFound:allFoundNodes) {
-                if(
-                        nodesFound.getNodeType() == Node.NodeType.start
-                        ||
-                        nodesFound.getNodeType() == Node.NodeType.end
-                        ||
-                        nodesFound.getNodeType() == Node.NodeType.block
-                ){
-                    continue;
+            if(allFoundNodes == null || allFoundNodes.size() <= 0){
+                System.out.println("No path found");
+            }else{
+
+                for (var nodesFound:allFoundNodes) {
+                    if(
+                            nodesFound.getNodeType() == Node.NodeType.start
+                                    ||
+                                    nodesFound.getNodeType() == Node.NodeType.end
+                                    ||
+                                    nodesFound.getNodeType() == Node.NodeType.block
+                    ){
+                        continue;
+                    }
+                    //nodesFound.setNodeType(Node.NodeType.path);
+                    Node.nodes[nodesFound.getRow()][nodesFound.getCol()].setNodeType(Node.NodeType.path);
                 }
-                //nodesFound.setNodeType(Node.NodeType.path);
-                Node.nodes[nodesFound.getRow()][nodesFound.getCol()].setNodeType(Node.NodeType.path);
             }
+
         }
     }
 }
