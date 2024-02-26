@@ -3,9 +3,13 @@ package org.example.pathfinding;
 import org.example.constant.Constants;
 import org.example.objects.grid.Node;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AStarPathfinding {
 
@@ -14,6 +18,30 @@ public class AStarPathfinding {
 
     private ArrayList<Node>openList = new ArrayList<>();
     private ArrayList<Node>closedList = new ArrayList<>();
+
+    List<Node> tempNode = new ArrayList<>();
+
+    final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+    public AStarPathfinding() {
+    }
+
+    static TimeUnit convert(TimeUnit timeUnit) {
+        return TimeUnit.of(timeUnit.toChronoUnit());
+    }
+
+    public List<Node> executeThreadExternally(Node startNodeParam, Node endNodeParam){
+
+        executorService.scheduleAtFixedRate(new Runnable() {
+
+            @Override
+            public void run() {
+                tempNode = search(startNodeParam, endNodeParam);
+            }
+        }, 0, 0, convert(TimeUnit.SECONDS));
+
+        return tempNode;
+    }
 
     public List<Node> search(Node startNode, Node endNode){
         //1. Add startNode to open list & set all nodes default value to max int
@@ -44,7 +72,7 @@ public class AStarPathfinding {
             this.openList.remove(currentNode);
             this.closedList.add(currentNode);
 
-            //3. cycle throguh all the neighbours
+            //3. cycle through all the neighbours
             for (var neighbourNode : getNeighbourList(currentNode)) {
 
                 //check if the neighbour node is already in the closed list
@@ -82,12 +110,12 @@ public class AStarPathfinding {
             allNeighboursList.add(Node.nodes[currentNode.getRow()][currentNode.getCol()-1]);
 
             //Left Down
-            if(currentNode.getRow() - 1 >= 0){
+            if(currentNode.getRow() - 1 >= 0 && (Node.nodes[currentNode.getRow()-1][currentNode.getCol()-1].getNodeType() != Node.NodeType.block)){
                 allNeighboursList.add(Node.nodes[currentNode.getRow()-1][currentNode.getCol()-1]);
             }
 
             //Left Up
-            if(currentNode.getRow() + 1 < Constants.MAX_ROWS){
+            if(currentNode.getRow() + 1 < Constants.MAX_ROWS && (Node.nodes[currentNode.getRow()+1][currentNode.getCol()-1].getNodeType() != Node.NodeType.block)){
                 allNeighboursList.add(Node.nodes[currentNode.getRow()+1][currentNode.getCol()-1]);
             }
         }
@@ -103,7 +131,7 @@ public class AStarPathfinding {
 
             //Right Up
             if(currentNode.getRow() - 1 >= 0){
-                if(Node.nodes[currentNode.getRow()-1][currentNode.getCol()+1].getNodeType() != Node.NodeType.block){
+                if(Node.nodes[currentNode.getRow()-1][currentNode.getCol()+1].getNodeType() != Node.NodeType.block && (Node.nodes[currentNode.getRow()][currentNode.getCol()+1].getNodeType() != Node.NodeType.block)){
                     allNeighboursList.add(Node.nodes[currentNode.getRow()-1][currentNode.getCol()+1]);
                 }
             }
@@ -111,7 +139,7 @@ public class AStarPathfinding {
 
             //Right Down
             if(currentNode.getRow() + 1 < Constants.MAX_ROWS){
-                if(Node.nodes[currentNode.getRow()+1][currentNode.getCol()+1].getNodeType() != Node.NodeType.block){
+                if(Node.nodes[currentNode.getRow()+1][currentNode.getCol()+1].getNodeType() != Node.NodeType.block && (Node.nodes[currentNode.getRow()][currentNode.getCol()+1].getNodeType() != Node.NodeType.block)){
                     allNeighboursList.add(Node.nodes[currentNode.getRow()+1][currentNode.getCol()+1]);
                 }
 

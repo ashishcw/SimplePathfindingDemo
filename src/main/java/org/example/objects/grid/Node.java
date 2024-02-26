@@ -93,20 +93,22 @@ public class Node extends GameObject {
         nodeColorScheme();
         g.setColor(this.getColor());
 
-        if(
-                this.getNodeType() == NodeType.start
-                ||
-                this.getNodeType() == NodeType.end
-                ||
-                this.getNodeType() == NodeType.block
-                ||
-                this.getNodeType() == NodeType.path
-        ){
-            g.fillRect(this.getxPos(), this.getyPos(), this.getSizeWidth(), this.getSizeHeight());
-        }else {
-            g.drawRect(this.getxPos(), this.getyPos(), this.getSizeWidth(), this.getSizeHeight());
-            //g.fillRect(this.getxPos(), this.getyPos(), this.getSizeWidth(), this.getSizeHeight());
-        }
+//        if(
+//                this.getNodeType() == NodeType.start
+//                ||
+//                this.getNodeType() == NodeType.end
+//                ||
+//                this.getNodeType() == NodeType.block
+//                ||
+//                this.getNodeType() == NodeType.path
+//        ){
+//            g.fillRect(this.getxPos(), this.getyPos(), this.getSizeWidth(), this.getSizeHeight());
+//        }else {
+//            g.drawRect(this.getxPos(), this.getyPos(), this.getSizeWidth(), this.getSizeHeight());
+//            //g.fillRect(this.getxPos(), this.getyPos(), this.getSizeWidth(), this.getSizeHeight());
+//        }
+
+        g.fillRect(this.getxPos(), this.getyPos(), this.getSizeWidth(), this.getSizeHeight());
 
 
     }
@@ -127,7 +129,7 @@ public class Node extends GameObject {
             for (int j = 0; j < Constants.MAX_COLS; j++){
                 nodes[i][j] = new Node(j*Constants.NODE_OFFSET, i*Constants.NODE_OFFSET, j, i, NodeType.none);
                 if(generateRandomMap){
-                    if(rnd.nextInt(0, 10) > 8){
+                    if(rnd.nextInt(0, 10) > 7){
                         nodes[i][j] = new Node(j*Constants.NODE_OFFSET, i*Constants.NODE_OFFSET, j, i, NodeType.block);
                     }
                 }
